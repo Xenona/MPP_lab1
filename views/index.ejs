@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>List of tasks</title>
+    <title>Список задач</title>
     <link rel="stylesheet" href="/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
 </head>
 <body>
-    <h1>Cool Tasks!!!</h1>
+    <h1>Список задач</h1>
 
     <form action="/add" method="post">
-        <input type="text" name="title" placeholder="Task Name" required>
+        <input type="text" name="title" placeholder="Название задачи" required>
         <input type="date" name="dueDate" required>
-        <button type="submit">Add</button>
+        <button type="submit">Добавить</button>
     </form>
 
-    <div class="buttons">
-        <a href="/">All</a> |
-        <a href="/?status=completed">Done</a> |
-        <a href="/?status=pending">Waiting</a>
+    <div>
+        <a href="/">Все</a> |
+        <a href="/?status=completed">Выполненные</a> |
+        <a href="/?status=pending">В ожидании</a>
     </div>
 
     <div id="taskList">
         <% tasks.forEach(task => { %>
             <div class="task <%= task.completed ? 'completed' : '' %>" data-id="<%= task.id %>">
                 <h2><%= task.title %></h2>
-                <p>Deadline: <%= task.dueDate %></p>
+                <p>Дата завершения: <%= task.dueDate %></p>
                 <% if (task.attachments && task.attachments.length > 0) { %>
-                    <p>attachments:</p>
+                    <p>Вложения:</p>
                     <ul>
                         <% task.attachments.forEach(attachment => { %>
-                            <li><a href="/<%= attachment %>"><%= attachment %></a></li>
+                            <li><a href="/download/<%= attachment %>"><%= attachment %></a></li>
                         <% }) %>
                     </ul>
                 <% } %>
                 <form action="/complete/<%= task.id %>" method="post">
-                    <button type="submit" <%= task.completed ? 'disabled' : '' %>>Done</button>
+                    <button type="submit" <%= task.completed ? 'disabled' : '' %>>Выполнено</button>
                 </form>
                 <form action="/upload/<%= task.id %>" method="post" enctype="multipart/form-data">
                     <input type="file" name="attachment">
-                    <button type="submit">Attach (yay)</button>
+                    <button type="submit">Прикрепить файл</button>
                 </form>
             </div>
         <% }) %>

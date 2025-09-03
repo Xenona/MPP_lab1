@@ -38,7 +38,6 @@ input[type="file"] {
 }
 
 
-
 .task {
   border: 1px solid cyan;
   padding: var(--gap);
@@ -60,4 +59,8 @@ a {
   padding: var(--gap);
   margin: var(--gap);
   background-color: aqua;
+}
+
+li {
+  min-height: calc(var(--gap) * 4)
 }

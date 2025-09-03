@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import ejs from 'ejs';
 import multer from 'multer';
 import path from 'path';
+import * as fs from "fs"
 
 const app = express();
 const port = 3000;
@@ -109,6 +110,22 @@ app.post('/complete/:id', (req: Request, res: Response) => {
   }
   res.redirect('/');
 });
+
+app.get('/download/:filename', (req: Request, res: Response) => {
+  const filename = req.params.filename;
+  const filePath = path.join(__dirname, "../uploads", filename)
+
+  if (fs.existsSync(filePath)) {
+    res.download(filePath, filename, (err) => {
+      if (err) {
+        console.error("Download error")
+        res.status(500).send("Download error")
+      }
+    });
+  } else {
+    res.status(404).send("No such file found")
+  }
+})
 
 app.post('/upload/:id', upload.single('attachment'), (req: Request, res: Response) => {
   const id = parseInt(req.params.id);
