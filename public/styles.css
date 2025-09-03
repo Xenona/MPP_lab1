@@ -2,9 +2,42 @@
   --gap: 10px
 }
 
+div {
+  height: fit-content;
+  height: 100%
+}
+
 body {
   font-family: sans-serif;
+  background-color: rgb(238, 255, 255);
 }
+
+
+.buttons {
+  height: 80px;
+  display:flex;
+  align-items: center;
+  border-radius: 4px;
+}
+
+
+button {
+  text-decoration: none;
+  padding: var(--gap);
+  margin: var(--gap);
+  background-color: aqua;
+  border: none
+}
+
+input[type="file"] {
+  text-decoration: none;
+  padding: var(--gap);
+  margin: var(--gap);
+  background-color: aqua;
+  border: none
+}
+
+
 
 .task {
   border: 1px solid cyan;
@@ -20,4 +53,11 @@ body {
 .completed {
   text-decoration: line-through;
   color: greenyellow;
+}
+
+a {
+  text-decoration: none;
+  padding: var(--gap);
+  margin: var(--gap);
+  background-color: aqua;
 }

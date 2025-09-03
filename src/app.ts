@@ -121,7 +121,6 @@ app.post('/upload/:id', upload.single('attachment'), (req: Request, res: Respons
 });
 
 app.listen(port, () => {
-  console.log(__dirname+"../views")
 
   console.log(`Server is running on http://localhost:${port}`);
 });
