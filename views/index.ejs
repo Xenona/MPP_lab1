@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List of tasks</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+</head>
+<body>
+    <h1></h1>
+
+    <form action="/add" method="post">
+        <input type="text" name="title" placeholder="Task Name" required>
+        <input type="date" name="dueDate" required>
+        <button type="submit">Add</button>
+    </form>
+
+    <div>
+        <a href="/">All</a> |
+        <a href="/?status=completed">Done</a> |
+        <a href="/?status=pending">Waiting</a>
+    </div>
+
+    <div id="taskList">
+        <% tasks.forEach(task => { %>
+            <div class="task <%= task.completed ? 'completed' : '' %>" data-id="<%= task.id %>">
+                <h2><%= task.title %></h2>
+                <p>Deadline: <%= task.dueDate %></p>
+                <% if (task.attachments && task.attachments.length > 0) { %>
+                    <p>attachments:</p>
+                    <ul>
+                        <% task.attachments.forEach(attachment => { %>
+                            <li><a href="/<%= attachment %>"><%= attachment %></a></li>
+                        <% }) %>
+                    </ul>
+                <% } %>
+                <form action="/complete/<%= task.id %>" method="post">
+                    <button type="submit" <%= task.completed ? 'disabled' : '' %>>Done</button>
+                </form>
+                <form action="/upload/<%= task.id %>" method="post" enctype="multipart/form-data">
+                    <input type="file" name="attachment">
+                    <button type="submit">Attach (yay)</button>
+                </form>
+            </div>
+        <% }) %>
+    </div>
+
+    <script>
+        const taskList = document.getElementById('taskList');
+
+        if (taskList) {
+            new Sortable(taskList, {
+                animation: 150,
+                onEnd: function (evt) {
+                    const newOrder = Array.from(taskList.children).map(item => parseInt(item.dataset.id));
+
+                    fetch('/update-order', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ order: newOrder })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            console.error('Failed to update order');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                }
+            });
+        }
+    </script>
+</body>
+</html>
